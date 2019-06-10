@@ -29,6 +29,11 @@ dependencies {
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.7'
 
     testCompile 'junit:junit:4.12'
+    
+    // Geolocation service
+    compile 'com.maxmind.geoip2:geoip2:2.12.0'
+    // Geohashing
+    implementation 'ch.hsr:geohash:1.3.0'
 }
 
 jar {

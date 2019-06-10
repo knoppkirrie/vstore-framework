@@ -2,7 +2,11 @@ package vstore.framework;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +128,10 @@ public class VStore {
         {
             mInstance = new VStore(baseDir, masterNodeAddress);
         }
+        
+        // Initialize PositionTracking
+        ContextManager.get().initializePositionTracking();        
+        
     }
 
     /**

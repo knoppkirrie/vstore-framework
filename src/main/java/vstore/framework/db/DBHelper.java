@@ -116,7 +116,8 @@ public class DBHelper {
 	                DBSchema.FilesTable.NODEUUID + " TEXT, " +
                     DBSchema.FilesTable.STORED_NODES + " TEXT," +
 	                DBSchema.FilesTable.CONTEXTJSON + " TEXT," +
-	                DBSchema.FilesTable.DELETE_PENDING + " INTEGER)");
+	                DBSchema.FilesTable.DELETE_PENDING + " INTEGER," + 
+	                DBSchema.FilesTable.MEAN_ACCESS_TIME + " TEXT)");
 	
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.RulesTable.__NAME + "(" +
 	                DBSchema.RulesTable.ID + " TEXT PRIMARY KEY NOT NULL," +
@@ -162,6 +163,20 @@ public class DBHelper {
 	
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.CurrentDownloads.__NAME + "(" +
 	                DBSchema.CurrentDownloads.FILE_UUID + " TEXT PRIMARY KEY NOT NULL)");
+	        
+	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.PositionTracking.__NAME + "(" + 
+	        		DBSchema.PositionTracking.ID + " TEXT PRIMARY KEY NOT NULL," + 
+	        		DBSchema.PositionTracking.LAT + " REAL NOT NULL," + 
+	        		DBSchema.PositionTracking.LNG + " REAL NOT NULL," + 
+	        		DBSchema.PositionTracking.TIMESTAMP + " INTEGER NOT NULL," + 
+	        		DBSchema.PositionTracking.GEOHASH + " TEXT NOT NULL)");
+	        
+	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.FileAccess.__NAME + "(" + 
+	        		DBSchema.FileAccess.ID + " TEXT PRIMARY KEY NOT NULL," + 
+	        		DBSchema.FileAccess.FILE + " TEXT NOT NULL," + 
+	        		DBSchema.FileAccess.GEOHASH + " TEXT," + 
+	        		DBSchema.FileAccess.TIMEOFWEEK + " TEXT NOT NULL," + 
+	        		DBSchema.FileAccess.TYPE + " TEXT NOT NULL)");
     	} 
     	catch (SQLException e) 
     	{

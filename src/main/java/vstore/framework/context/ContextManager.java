@@ -1,5 +1,12 @@
 package vstore.framework.context;
 
+import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import vstore.framework.db.table_helper.PositionTrackingDBHelper;
+import vstore.framework.exceptions.DatabaseException;
+
 public class ContextManager {
     /**
      * This field contains the current context description.
@@ -100,5 +107,33 @@ public class ContextManager {
     public final ContextDescription getCurrentContext() {
         return mCurrentContext;
     }
+    
+    public void initializePositionTracking() {
+    	Timer t = new Timer();
+        TrackingTask tracker = instance.new TrackingTask();
+        t.scheduleAtFixedRate(tracker, 0, 1000 * 60 * 10);	// every 10 minutes
+    }
 
+    /**
+     * Is responsible for tracking the device's location and save it into the DB
+     * 
+     */
+    class TrackingTask extends TimerTask {
+
+		@Override
+		public void run() {
+			// Put position with timestamp into DB
+			try {
+				PositionTrackingDBHelper.insertLocation( ContextManager.get().getCurrentContext().getLocationContext() );
+//				System.out.println("Location stored.");
+			} catch (SQLException e) {
+				System.out.println("Location storing failed:");
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+//				e.printStackTrace();
+//				System.out.println("Location was null... nothing stored.");
+			}
+		}
+    }
+    
 }

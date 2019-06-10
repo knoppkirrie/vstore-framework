@@ -13,8 +13,12 @@ import vstore.framework.communication.download.Downloader;
 import vstore.framework.communication.download.events.DownloadFailedEvent;
 import vstore.framework.communication.download.events.DownloadProgressEvent;
 import vstore.framework.communication.download.events.DownloadedFileReadyEvent;
+import vstore.framework.context.ContextManager;
 import vstore.framework.db.DBResultOrdering;
+import vstore.framework.db.DBSchema;
+import vstore.framework.db.table_helper.FileAccessDBHelper;
 import vstore.framework.db.table_helper.FileDBHelper;
+import vstore.framework.db.table_helper.PositionTrackingDBHelper;
 import vstore.framework.error.ErrorCode;
 import vstore.framework.error.ErrorMessages;
 import vstore.framework.exceptions.VStoreException;
@@ -204,6 +208,15 @@ public class FileManager {
             throw new RuntimeException(ErrorMessages.PARAMETERS_MUST_NOT_BE_NULL);
         }
         final String requestId = UUID.randomUUID().toString();
+        
+        // store FileAccess to database with current location and timeOfWeek to database
+        try {
+        	FileAccessDBHelper.insertFileAccess(uuid, ContextManager.get().getCurrentContext().getLocationContext(), DBSchema.FileAccess.TypeOfAccess.GET);
+        
+        } catch(SQLException e){
+        	e.printStackTrace();
+        }
+               
 
         VStoreFile f = null;
         //Check if it is my own file. If it is, then serve from local storage.

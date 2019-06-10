@@ -32,9 +32,12 @@ public class DBSchema {
         public static final String STORED_NODES = "stored_nodes"; // TEXT
         public static final String CONTEXTJSON = "context_json"; // TEXT
         public static final String DELETE_PENDING = "delete_pending"; //INTEGER
+        
+        public static final String MEAN_ACCESS_TIME = "mean_access_time";	// TEXT
 
 		private static final String[] COLUMNS = {UUID, DESCRIPTIVE_NAME, MIME, EXTENSION,
-                DATE_CREATION, SIZE, UPLOAD_PENDING, PRIVATE, NODEUUID, STORED_NODES, CONTEXTJSON, DELETE_PENDING};
+                DATE_CREATION, SIZE, UPLOAD_PENDING, PRIVATE, NODEUUID, STORED_NODES, CONTEXTJSON, 
+                DELETE_PENDING, MEAN_ACCESS_TIME};
     }
 
     /**
@@ -126,5 +129,35 @@ public class DBSchema {
         public static final String __NAME = "current_downloads";
 
         public static final String FILE_UUID = "file_uuid"; // TEXT PRIMARY KEY NOT NULL
+    }
+    
+    public static final class PositionTracking {
+    	public static final String __NAME = "position_tracking";
+    	
+    	public static final String ID = "id";	// TEXT PRIMARY KEY NOT NULL
+    	public static final String LAT = "lat";	// REAL NOT NULL
+    	public static final String LNG = "lng";	// REAL NOT NULL
+    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
+    	public static final String GEOHASH = "geohash";	// TEXT NOT NULL
+    	
+    	private static final String[] COLUMNS = {ID, LAT, LNG, TIMESTAMP, GEOHASH};
+    }
+    
+    public static final class FileAccess {
+    	public static final String __NAME = "file_access";
+    	
+    	public static final String ID = "id";		// TEXT PRIMARY KEY NOT NULL
+    	public static final String FILE = "file";	// TEXT NOT NULL
+    	public static final String GEOHASH = "geohash";	// TEXT
+    	public static final String TIMEOFWEEK = "timeOfWeek";	// TEXT NOT NULL
+//    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
+    	public static final String TYPE = "type";	// TEXT NOT NULL
+    	
+    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TYPE};
+    	
+    	public static final class TypeOfAccess {
+    		public static final String STORE = "store";
+    		public static final String GET = "get";
+    	}
     }
 }

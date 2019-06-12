@@ -21,13 +21,13 @@ public class FileAccessDBHelper {
 	public static void insertFileAccess(String fileUuid, VLocation loc, String type) throws SQLException {
 		
 		String sql = "INSERT INTO "
-				+ DBSchema.FileAccess.__NAME + " " 
+				+ DBSchema.FileAccessTable.__NAME + " " 
 				+ "("
-				+ DBSchema.FileAccess.ID + ", "
-				+ DBSchema.FileAccess.FILE + ", "
-				+ DBSchema.FileAccess.GEOHASH + ", "
-				+ DBSchema.FileAccess.TIMEOFWEEK + ", "
-				+ DBSchema.FileAccess.TYPE + ")"
+				+ DBSchema.FileAccessTable.ID + ", "
+				+ DBSchema.FileAccessTable.FILE + ", "
+				+ DBSchema.FileAccessTable.GEOHASH + ", "
+				+ DBSchema.FileAccessTable.TIMEOFWEEK + ", "
+				+ DBSchema.FileAccessTable.TYPE + ")"
 				+ "VALUES (?,?,?,?,?)";
 		
 		String geohashString = "";

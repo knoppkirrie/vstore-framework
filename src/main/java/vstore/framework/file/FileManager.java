@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import vstore.framework.access.FileAccessManager;
 import vstore.framework.communication.CommunicationManager;
 import vstore.framework.communication.download.Downloader;
 import vstore.framework.communication.download.events.DownloadFailedEvent;
@@ -210,12 +211,14 @@ public class FileManager {
         final String requestId = UUID.randomUUID().toString();
         
         // store FileAccess to database with current location and timeOfWeek to database
-        try {
-        	FileAccessDBHelper.insertFileAccess(uuid, ContextManager.get().getCurrentContext().getLocationContext(), DBSchema.FileAccess.TypeOfAccess.GET);
-        
-        } catch(SQLException e){
-        	e.printStackTrace();
-        }
+//        try {
+//        	FileAccessDBHelper.insertFileAccess(uuid, ContextManager.get().getCurrentContext().getLocationContext(), DBSchema.FileAccess.TypeOfAccess.GET);
+        	FileAccessManager.get().newAccess(uuid, System.currentTimeMillis() );
+        	
+        	
+//        } catch(SQLException e){
+//        	e.printStackTrace();
+//        }
                
 
         VStoreFile f = null;
@@ -226,6 +229,7 @@ public class FileManager {
             {
                 f = FileDBHelper.getFile(uuid);
                 //File found locally.
+//                System.out.println("FILE FOUND LOCALLY");
                 if(f != null)
                 {
                     DownloadedFileReadyEvent evt = new DownloadedFileReadyEvent();
@@ -243,7 +247,8 @@ public class FileManager {
         }
 
         //File not found locally. Use download handler.
-        Downloader.downloadFile(uuid, requestId, dir);
+        System.out.print("FILE NOT FOUND LOCALLY. DOWNLOAD STARTED: ");
+        System.out.println( Downloader.downloadFile(uuid, requestId, dir) );
     }
 
     /**

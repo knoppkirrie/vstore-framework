@@ -11,16 +11,24 @@ import ch.hsr.geohash.queries.GeoHashCircleQuery;
  */
 public class AccessLocation {
 
-//	private GeoHash geohash;
+	private String id;
+	private GeoHash geohash;
 	private int radius;
 	private GeoHashCircleQuery circle;
+	private String fileUuid;
+	private int count;
+	private TimeOfWeek meanToW;
 	
-	public AccessLocation(String geohashString, int radius) {
-		GeoHash geohash = GeoHash.fromGeohashString(geohashString);
-		
-		this.radius = radius;
-		this.circle = new GeoHashCircleQuery(geohash.getPoint(), radius);
+	public AccessLocation(String id) {
+		this.id = id;
 	}
+
+//	public AccessLocation(String geohashString, int radius) {
+//		GeoHash geohash = GeoHash.fromGeohashString(geohashString);
+//		
+//		this.radius = radius;
+//		this.circle = new GeoHashCircleQuery(geohash.getPoint(), radius);
+//	}
 	
 	/**
 	 * @param geoHashString the geohash String of the location 
@@ -34,6 +42,64 @@ public class AccessLocation {
 	
 	public int getRadius() {
 		return this.radius;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public GeoHash getGeohash() {
+		return geohash;
+	}
+	
+	public String geohashString() {
+		return geohash.toBase32();
+	}
+
+	public void setGeohash(String geohashString) {
+		GeoHash geohash = GeoHash.fromGeohashString(geohashString);
+		this.geohash = geohash;
+	}
+	
+	public void setGeohash(GeoHash geohash) {
+		this.geohash = geohash;
+	}
+
+	public String getFileUuid() {
+		return fileUuid;
+	}
+
+	public void setFileUuid(String fileUuid) {
+		this.fileUuid = fileUuid;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public TimeOfWeek getMeanToW() {
+		return meanToW;
+	}
+
+	public void setMeanToW(TimeOfWeek meanToW) {
+		this.meanToW = meanToW;
+	}
+
+	public void setMeanToW(String meanToWString) {
+		TimeOfWeek tow = new TimeOfWeek(meanToWString);
+		this.meanToW = tow;		
+	}
+	
+	public void setRadius(int radius) {
+		this.radius = radius;
 	}
 	
 	

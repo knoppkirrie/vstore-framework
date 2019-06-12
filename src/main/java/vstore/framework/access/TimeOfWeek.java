@@ -61,10 +61,26 @@ public class TimeOfWeek {
 	}
 	
 	/**
+	 * Creates a TimeOfWeek object from a String representation in the form of dd-hh:mm
+	 * @param tow 
+	 */
+	public TimeOfWeek(String tow) {
+		String[] split = tow.split("-");
+		
+		int day = Integer.valueOf( split[0] );
+		int hour = Integer.valueOf(split[1].split(":")[0]);
+		int minute =  Integer.valueOf(split[1].split(":")[1]);
+		
+		this.setDay(day);
+		this.setHour(hour);
+		this.setMinute(minute);
+	}
+	
+	/**
 	 * Transforms the weekday representation of a calendar object from 1/sunday - 7/saturday 
-	 * to 1/monday - 7/sunday 
+	 * to 0/monday - 6/sunday 
 	 * @param c the Calendar
-	 * @return 1 for monday, 7 for sunday; remaining days respectively in between
+	 * @return 0 for monday, 6 for sunday; remaining days respectively in between
 	 */
 	private static int getTransformedWeekday(Calendar c) {
 		

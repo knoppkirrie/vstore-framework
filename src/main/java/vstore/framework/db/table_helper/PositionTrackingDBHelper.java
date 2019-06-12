@@ -26,13 +26,13 @@ public class PositionTrackingDBHelper {
 		if (loc == null) throw new DatabaseException(ErrorMessages.PARAMETERS_MUST_NOT_BE_NULL);
 		
 		String sql = "INSERT INTO "
-				+ DBSchema.PositionTracking.__NAME + " "
+				+ DBSchema.PositionTrackingTable.__NAME + " "
 				+ "("
-				+ DBSchema.PositionTracking.ID + ", "
-				+ DBSchema.PositionTracking.LAT + ", "
-				+ DBSchema.PositionTracking.LNG + ", "
-				+ DBSchema.PositionTracking.TIMESTAMP + ", "
-				+ DBSchema.PositionTracking.GEOHASH + ")"
+				+ DBSchema.PositionTrackingTable.ID + ", "
+				+ DBSchema.PositionTrackingTable.LAT + ", "
+				+ DBSchema.PositionTrackingTable.LNG + ", "
+				+ DBSchema.PositionTrackingTable.TIMESTAMP + ", "
+				+ DBSchema.PositionTrackingTable.GEOHASH + ")"
 				+ "VALUES (?,?,?,?,?)";
 		
 		double lat = loc.getLatLng().getLatitude();
@@ -55,7 +55,7 @@ public class PositionTrackingDBHelper {
 	}
 	
 	public static void getPositions() throws SQLException {
-		String sql = "SELECT * FROM " + DBSchema.PositionTracking.__NAME ;
+		String sql = "SELECT * FROM " + DBSchema.PositionTrackingTable.__NAME ;
 	
 		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
 //            pstmt.setInt(1, 0);
@@ -70,11 +70,11 @@ public class PositionTrackingDBHelper {
             while (rs.next())
             {
             	System.out.print("Row: ");
-            	System.out.print( rs.getString(DBSchema.PositionTracking.ID) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTracking.LAT) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTracking.LNG) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTracking.GEOHASH) + "; " );
-            	System.out.println( rs.getString(DBSchema.PositionTracking.TIMESTAMP) + "; " );
+            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.ID) + "; " );
+            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LAT) + "; " );
+            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LNG) + "; " );
+            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.GEOHASH) + "; " );
+            	System.out.println( rs.getString(DBSchema.PositionTrackingTable.TIMESTAMP) + "; " );
 //                FileRowWrapper wrp = new FileRowWrapper(rs);
 //                files.add(wrp.getFile());
             	

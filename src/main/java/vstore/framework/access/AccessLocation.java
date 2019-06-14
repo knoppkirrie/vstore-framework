@@ -10,6 +10,8 @@ import ch.hsr.geohash.queries.GeoHashCircleQuery;
  * 
  */
 public class AccessLocation {
+	
+	public static final int CIRCLE_RADIUS = 1000;
 
 	private String id;
 	private GeoHash geohash;
@@ -63,10 +65,18 @@ public class AccessLocation {
 	public void setGeohash(String geohashString) {
 		GeoHash geohash = GeoHash.fromGeohashString(geohashString);
 		this.geohash = geohash;
+		
+		setCircle();
 	}
 	
 	public void setGeohash(GeoHash geohash) {
 		this.geohash = geohash;
+		
+		setCircle();
+	}
+	
+	private void setCircle() {
+		this.circle = new GeoHashCircleQuery(geohash.getPoint(), radius);
 	}
 
 	public String getFileUuid() {
@@ -83,6 +93,13 @@ public class AccessLocation {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+	
+	/**
+	 * Increases the counter for this AccessLocation object by 1.
+	 */
+	public void increaseCount() {
+		this.count++;
 	}
 
 	public TimeOfWeek getMeanToW() {

@@ -191,13 +191,40 @@ public class TimeOfWeek {
 	 * @param other
 	 * @return the time difference in minutes between the two objects this and other
 	 */
-	public int getTimeDiff(TimeOfWeek other) {
+	public int getMinuteDiff(TimeOfWeek other) {
 		
-		int thisMinutes = this.getTotalMinutes();
-		int otherMinutes = other.getTotalMinutes();
+		TimeOfWeek earlier, latter;
 		
-		return thisMinutes - otherMinutes;
+		// order by order of appearence during week
+		if ( this.getTotalMinutes() < other.getTotalMinutes() ) {
+			earlier = this;
+			latter = other;
+		} else {
+			earlier = other;
+			latter = this;
+//			swapped = true;
+		}	
 		
+		int minuteDiff = 0;
+		// get mininal distance in minutes between both objects
+		if ( (latter.getTotalMinutes() - earlier.getTotalMinutes()) > 5040 ) {
+			// go the other way round:
+			int minutesForward = 0;
+			for (int i = latter.getTotalMinutes(); i < latter.getTotalMinutes() + 5040; i++) {
+				if (i % 10080 == earlier.getTotalMinutes()) {
+					break;
+				}
+				minutesForward++;
+			}
+			
+//			System.out.println("Minutes forward: " + minutesForward);
+			minuteDiff = minutesForward * (-1);
+		} else {
+			minuteDiff = latter.getTotalMinutes() - earlier.getTotalMinutes() ;
+		}
+		
+		
+		return minuteDiff;
 	}
 	
 	/**

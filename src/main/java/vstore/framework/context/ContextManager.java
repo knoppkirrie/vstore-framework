@@ -1,9 +1,15 @@
 package vstore.framework.context;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ch.hsr.geohash.GeoHash;
+import vstore.framework.access.AccessLocation;
+import vstore.framework.access.TimeOfWeek;
+import vstore.framework.context.types.location.VLocation;
+import vstore.framework.db.table_helper.AccessLocationDBHelper;
 import vstore.framework.db.table_helper.PositionTrackingDBHelper;
 import vstore.framework.exceptions.DatabaseException;
 
@@ -131,13 +137,14 @@ public class ContextManager {
 		
 			for (AccessLocation al: alList) {
 				
-				if (al.contains(geo.toBase32()) && Math.abs( al.getMeanToW().getTimeDiff(now) ) < AccessLocation.TIME_THRESHOLD) {
+				if (al.contains(geo.toBase32()) && Math.abs( al.getMeanToW().getMinuteDiff(now) ) < AccessLocation.TIME_THRESHOLD) {
 					// location is near known AccessLocation and within timeThreshold window
 					double meters = al.getDistance(geo);
-					int minutes = al.getMeanToW().getTimeDiff(now);
+					int minutes = al.getMeanToW().getMinuteDiff(now);
 					
-					score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (minutes / AccessLocation.TIME_THRESHOLD) ) / 2;
+					score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (Math.abs(minutes) / AccessLocation.TIME_THRESHOLD) ) / 2;
 					
+					// TODO: penalty if meanToW has already passed?
 				}
 			}
 

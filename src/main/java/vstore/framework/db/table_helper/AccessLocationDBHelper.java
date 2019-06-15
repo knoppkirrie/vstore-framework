@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import ch.hsr.geohash.GeoHash;
 import vstore.framework.access.AccessLocation;
 import vstore.framework.db.DBHelper;
 import vstore.framework.db.DBSchema;
@@ -91,4 +92,38 @@ public class AccessLocationDBHelper {
 		
 		return result;
 	}
+	
+	public static ArrayList<AccessLocation> getAccessLocationsForLocation(GeoHash geo) throws SQLException {
+		ArrayList<AccessLocation> res = new ArrayList<AccessLocation>();
+		if (geo == null) return res;
+
+		String sql = "SELECT * FROM " + DBSchema.AccessLocationTable.__NAME
+				+ " WHERE "
+				+ DBSchema.AccessLocationTable.GEOHASH + " = ? ";
+		
+		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
+			
+			pstmt.setString(1, geo.toBase32());
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+            	AccessLocationRowWrapper alrw = new AccessLocationRowWrapper(rs);
+            	res.add( alrw.getAccessLocation() );
+            }
+			pstmt.close();
+			
+		}
+		
+		return res;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

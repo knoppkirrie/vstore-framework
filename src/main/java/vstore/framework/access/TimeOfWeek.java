@@ -187,6 +187,20 @@ public class TimeOfWeek {
 	}
 	
 	/**
+	 * 
+	 * @param other
+	 * @return the time difference in minutes between the two objects this and other
+	 */
+	public int getTimeDiff(TimeOfWeek other) {
+		
+		int thisMinutes = this.getTotalMinutes();
+		int otherMinutes = other.getTotalMinutes();
+		
+		return thisMinutes - otherMinutes;
+		
+	}
+	
+	/**
 	 * @return the total count of minutes into the week until this TimeOfWeek object
 	 */
 	private int getTotalMinutes() {

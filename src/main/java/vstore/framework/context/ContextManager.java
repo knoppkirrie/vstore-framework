@@ -108,6 +108,46 @@ public class ContextManager {
         return mCurrentContext;
     }
     
+    /**
+     * Calculates a probability score for the current VLocation that suggests if a FileAccess may be upcoming or not 
+     * @param loc the current VLocation.
+     * @return a score between 0.0 and 1.0
+     */
+    public double getPositionScore(VLocation loc) {
+    	double score = 0.0;
+    	
+    	if (loc == null) return (1 - score);
+    	
+    	double lat = loc.getLatLng().getLatitude();
+    	double lng = loc.getLatLng().getLongitude();
+    	GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, 12);
+    	
+    	TimeOfWeek now = new TimeOfWeek();
+    	
+    	
+    	try {
+    		
+			ArrayList<AccessLocation> alList = AccessLocationDBHelper.getAccessLocationsForLocation(geo);
+		
+			for (AccessLocation al: alList) {
+				
+				if (al.contains(geo.toBase32()) && Math.abs( al.getMeanToW().getTimeDiff(now) ) < AccessLocation.TIME_THRESHOLD) {
+					// location is near known AccessLocation and within timeThreshold window
+					double meters = al.getDistance(geo);
+					int minutes = al.getMeanToW().getTimeDiff(now);
+					
+					score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (minutes / AccessLocation.TIME_THRESHOLD) ) / 2;
+					
+				}
+			}
+
+    	} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    	return (1 - score);
+    }
+    
     public void initializePositionTracking() {
     	Timer t = new Timer();
         TrackingTask tracker = instance.new TrackingTask();

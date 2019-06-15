@@ -12,6 +12,7 @@ import ch.hsr.geohash.queries.GeoHashCircleQuery;
 public class AccessLocation {
 	
 	public static final int CIRCLE_RADIUS = 1000;
+	public static final int TIME_THRESHOLD = 120;
 
 	private String id;
 	private GeoHash geohash;
@@ -117,6 +118,31 @@ public class AccessLocation {
 	
 	public void setRadius(int radius) {
 		this.radius = radius;
+	}
+	
+	/**
+	 * Calculates the distance between the geohashed locations of this and other using haversine formula
+	 * @param other 
+	 * @return 
+	 */
+	public double getDistance(GeoHash other) {
+		
+		double thisLat = this.getGeohash().getPoint().getLatitude();
+		double thisLng = this.getGeohash().getPoint().getLongitude();
+		double otherLat = other.getPoint().getLatitude();
+		double otherLng = other.getPoint().getLongitude();
+		
+		final int R = 6371000;	// earth radius in meters
+		double rho1 = Math.toRadians(thisLat);
+		double rho2 = Math.toRadians(otherLat);
+		double deltaRho = Math.toRadians(thisLat - otherLat);
+		double deltaLambda = Math.toRadians(thisLng - otherLng);
+		
+		double a = Math.sin(deltaRho / 2) * Math.sin(deltaRho / 2) 
+					+ Math.cos(rho1) * Math.cos(rho2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		
+		return R * c;
 	}
 	
 	

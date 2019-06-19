@@ -21,6 +21,8 @@ public class ContextManager {
 
     private static ContextManager instance;
 
+    public static final int TRACKING_INTERVAL = 10;
+    
     private ContextManager() {}
 
     /**
@@ -158,7 +160,7 @@ public class ContextManager {
     public void initializePositionTracking() {
     	Timer t = new Timer();
         TrackingTask tracker = instance.new TrackingTask();
-        t.scheduleAtFixedRate(tracker, 0, 1000 * 60 * 10);	// every 10 minutes
+        t.scheduleAtFixedRate(tracker, 0, 1000 * 60 * ContextManager.TRACKING_INTERVAL);	// transform minutes to milliseconds
     }
 
     /**

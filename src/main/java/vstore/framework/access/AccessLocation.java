@@ -123,7 +123,7 @@ public class AccessLocation {
 	/**
 	 * Calculates the distance between the geohashed locations of this and other using haversine formula
 	 * @param other 
-	 * @return 
+	 * @return the distance in meters
 	 */
 	public double getDistance(GeoHash other) {
 		

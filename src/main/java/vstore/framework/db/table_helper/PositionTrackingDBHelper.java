@@ -4,10 +4,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import vstore.framework.access.AccessLocation;
+import vstore.framework.context.PositionTracking.PositionTrackingPoint;
 import vstore.framework.context.types.location.VLocation;
 import vstore.framework.db.DBHelper;
 import vstore.framework.db.DBSchema;
 import vstore.framework.db.row_wrapper.FileRowWrapper;
+import vstore.framework.db.row_wrapper.PositionTrackingRowWrapper;
 import vstore.framework.error.ErrorMessages;
 import vstore.framework.exceptions.DatabaseException;
 import vstore.framework.utils.IdentifierUtils;
@@ -54,6 +57,48 @@ public class PositionTrackingDBHelper {
 		
 	}
 	
+	/**
+	 * Returns the last n entries of the PositionTracking table
+	 * @param n the number of entries to return
+	 * @throws SQLException
+	 */
+	public static PositionTrackingPoint[] getLastNPositionTracks(int n) throws SQLException {
+		
+		if (n < 1) return null;
+		
+		PositionTrackingPoint[] pArray = new PositionTrackingPoint[n];
+		
+		String sql = "SELECT * FROM " + DBSchema.PositionTrackingTable.__NAME
+				+ " ORDER BY " + DBSchema.PositionTrackingTable.TIMESTAMP + " DESC"
+				+ " LIMIT " + n;
+		
+		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
+			ResultSet rs = pstmt.executeQuery();
+			int counter = n-1;
+			
+			while (rs.next()) {
+
+				PositionTrackingRowWrapper rw = new PositionTrackingRowWrapper(rs);
+				pArray[n] = rw.getPositionTrackingPoint();
+				
+				n--;
+			}
+			
+			pstmt.close();
+		}
+
+
+		return pArray;
+	}
+	
+//	public static void getPositionScore(VLocation loc) {
+//		// TODO: compare current VLocation to known AccessLocations from DB and calculate a score 
+//		// 			for probability of upcoming access, based on distance to location and meanAccessTime
+//		
+//		// TODO: move to ContextManager
+//		
+//	}
+	
 	public static void getPositions() throws SQLException {
 		String sql = "SELECT * FROM " + DBSchema.PositionTrackingTable.__NAME ;
 	
@@ -69,15 +114,14 @@ public class PositionTrackingDBHelper {
             }
             while (rs.next())
             {
+            	// TODO: process query results
+            	
             	System.out.print("Row: ");
             	System.out.print( rs.getString(DBSchema.PositionTrackingTable.ID) + "; " );
             	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LAT) + "; " );
             	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LNG) + "; " );
             	System.out.print( rs.getString(DBSchema.PositionTrackingTable.GEOHASH) + "; " );
             	System.out.println( rs.getString(DBSchema.PositionTrackingTable.TIMESTAMP) + "; " );
-//                FileRowWrapper wrp = new FileRowWrapper(rs);
-//                files.add(wrp.getFile());
-            	
             	
             }
             pstmt.close();

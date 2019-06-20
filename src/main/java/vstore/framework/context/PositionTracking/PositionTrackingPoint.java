@@ -7,7 +7,7 @@ public class PositionTrackingPoint {
 	private String id;
 //	private float lat;
 //	private float lng;
-	private int timestamp;
+	private long timestamp;
 	private GeoHash geohash;
 	
 	
@@ -15,7 +15,7 @@ public class PositionTrackingPoint {
 		this.id = id;
 	}
 	
-	public void setTimestamp(int ts) {
+	public void setTimestamp(long ts) {
 		this.timestamp = ts;
 	}
 	
@@ -23,7 +23,7 @@ public class PositionTrackingPoint {
 		this.geohash = GeoHash.fromGeohashString(geohashString);
 	}
 	
-	public int getTimestamp() {
+	public long getTimestamp() {
 		return this.timestamp;
 	}
 	
@@ -33,6 +33,10 @@ public class PositionTrackingPoint {
 	
 	public String getGeohashString() {
 		return this.geohash.toBase32();
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 	
 }

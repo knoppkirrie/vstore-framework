@@ -22,7 +22,7 @@ public class PositionTrackingRowWrapper {
 			p = new PositionTrackingPoint(id);
 			
 			p.setGeoHash( res.getString(DBSchema.PositionTrackingTable.GEOHASH) );
-			p.setTimestamp( res.getInt(DBSchema.PositionTrackingTable.TIMESTAMP) );
+			p.setTimestamp( res.getLong(DBSchema.PositionTrackingTable.TIMESTAMP) );
 			
 			
 		} catch (SQLException e) {

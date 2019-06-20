@@ -3,6 +3,7 @@ package vstore.framework.db.table_helper;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 import vstore.framework.access.AccessLocation;
 import vstore.framework.context.PositionTracking.PositionTrackingPoint;
@@ -48,7 +49,7 @@ public class PositionTrackingDBHelper {
             pstmt.setString(1, IdentifierUtils.getNewUniqueIdentifier());
             pstmt.setDouble(2, lat);
             pstmt.setDouble(3, lng);
-            pstmt.setLong(4, loc.getTimestamp());
+            pstmt.setLong(4, Calendar.getInstance().getTimeInMillis());	// current timestamp
             pstmt.setString(5, geohash.toBase32());
 
             pstmt.execute();
@@ -58,7 +59,8 @@ public class PositionTrackingDBHelper {
 	}
 	
 	/**
-	 * Returns the last n entries of the PositionTracking table
+	 * Returns the last n entries of the PositionTracking table, ordered from old to new
+	 * (oldest at position 0 in Array)
 	 * @param n the number of entries to return
 	 * @throws SQLException
 	 */
@@ -79,9 +81,9 @@ public class PositionTrackingDBHelper {
 			while (rs.next()) {
 
 				PositionTrackingRowWrapper rw = new PositionTrackingRowWrapper(rs);
-				pArray[n] = rw.getPositionTrackingPoint();
+				pArray[counter] = rw.getPositionTrackingPoint();
 				
-				n--;
+				counter--;
 			}
 			
 			pstmt.close();

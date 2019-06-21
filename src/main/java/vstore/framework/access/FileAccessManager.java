@@ -48,7 +48,7 @@ public class FileAccessManager {
 		// create FileAccess obj
 		double lat = ContextManager.get().getCurrentContext().getLocationContext().getLatLng().getLatitude();
 		double lng = ContextManager.get().getCurrentContext().getLocationContext().getLatLng().getLongitude();
-		GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, 12);
+		GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
 		TimeOfWeek tow = new TimeOfWeek(timestamp);
 		
 		FileAccess fa = new FileAccess(fileUuid, geo, tow);

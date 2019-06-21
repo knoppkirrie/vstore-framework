@@ -21,14 +21,14 @@ public class AccessLocationRowWrapper {
 			String id = res.getString(DBSchema.AccessLocationTable.ID);
 			al = new AccessLocation(id);
 			
-			String geohashString = res.getString(DBSchema.AccessLocationTable.GEOHASH);
 			int radius = res.getInt(DBSchema.AccessLocationTable.RADIUS);
+			String geohashString = res.getString(DBSchema.AccessLocationTable.GEOHASH);
 			String fileUuid = res.getString(DBSchema.AccessLocationTable.FILE);
 			int count = res.getInt(DBSchema.AccessLocationTable.COUNT);
 			String meanToW = res.getString(DBSchema.AccessLocationTable.MEAN_TOW);
 			
-			al.setGeohash(geohashString);
 			al.setRadius(radius);
+			al.setGeohash(geohashString);
 			al.setFileUuid(fileUuid);
 			al.setCount(count);
 			al.setMeanToW(meanToW);			

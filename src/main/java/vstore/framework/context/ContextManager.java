@@ -2,12 +2,18 @@ package vstore.framework.context;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import ch.hsr.geohash.GeoHash;
 import vstore.framework.access.AccessLocation;
 import vstore.framework.access.TimeOfWeek;
+import vstore.framework.context.PositionTracking.PositionTrackingPoint;
+import vstore.framework.context.types.location.VLatLng;
 import vstore.framework.context.types.location.VLocation;
 import vstore.framework.db.table_helper.AccessLocationDBHelper;
 import vstore.framework.db.table_helper.PositionTrackingDBHelper;
@@ -22,6 +28,9 @@ public class ContextManager {
     private static ContextManager instance;
 
     public static final int TRACKING_INTERVAL = 10;
+    public static final int TRACK_LENGTH = 5;
+    public static final int GEOHASH_PRECISION = 12;
+    public static final double REPLICATION_SCORE_THRESHOLD = 0.8;
     
     private ContextManager() {}
 
@@ -119,16 +128,17 @@ public class ContextManager {
     /**
      * Calculates a probability score for the current VLocation that suggests if a FileAccess may be upcoming or not 
      * @param loc the current VLocation.
-     * @return a score between 0.0 and 1.0
+     * @return a Map<String, Double> with AccessLocation.Id as Key, the score as value 
      */
-    public double getPositionScore(VLocation loc) {
-    	double score = 0.0;
+    public HashMap<String, Double> getPositionScores(VLocation loc) {
+  
+    	HashMap<String, Double> scoreMap = new HashMap<String, Double>();
     	
-    	if (loc == null) return (1 - score);
+    	if (loc == null) return scoreMap;
     	
     	double lat = loc.getLatLng().getLatitude();
     	double lng = loc.getLatLng().getLongitude();
-    	GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, 12);
+    	GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
     	
     	TimeOfWeek now = new TimeOfWeek();
     	
@@ -144,9 +154,12 @@ public class ContextManager {
 					double meters = al.getDistance(geo);
 					int minutes = al.getMeanToW().getMinuteDiff(now);
 					
-					score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (Math.abs(minutes) / AccessLocation.TIME_THRESHOLD) ) / 2;
+					double score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (Math.abs(minutes) / AccessLocation.TIME_THRESHOLD) ) / 2;
 					
 					// TODO: penalty if meanToW has already passed?
+					
+					scoreMap.put(al.getId(), (1 - score) );
+					
 				}
 			}
 

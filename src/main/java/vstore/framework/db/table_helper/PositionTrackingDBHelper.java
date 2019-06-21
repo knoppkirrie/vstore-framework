@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 import vstore.framework.access.AccessLocation;
+import vstore.framework.context.ContextManager;
 import vstore.framework.context.PositionTracking.PositionTrackingPoint;
 import vstore.framework.context.types.location.VLocation;
 import vstore.framework.db.DBHelper;
@@ -42,7 +43,7 @@ public class PositionTrackingDBHelper {
 		double lat = loc.getLatLng().getLatitude();
 		double lng = loc.getLatLng().getLongitude();
 		
-		GeoHash geohash = GeoHash.withCharacterPrecision(lat, lng, 12);
+		GeoHash geohash = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
 //		System.out.println("SHOULD BE TRUE: " + geohash.getBoundingBox().contains(geohash.getPoint()));
 		
 		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
@@ -118,12 +119,12 @@ public class PositionTrackingDBHelper {
             {
             	// TODO: process query results
             	
-            	System.out.print("Row: ");
-            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.ID) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LAT) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LNG) + "; " );
-            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.GEOHASH) + "; " );
-            	System.out.println( rs.getString(DBSchema.PositionTrackingTable.TIMESTAMP) + "; " );
+//            	System.out.print("Row: ");
+//            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.ID) + "; " );
+//            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LAT) + "; " );
+//            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.LNG) + "; " );
+//            	System.out.print( rs.getString(DBSchema.PositionTrackingTable.GEOHASH) + "; " );
+//            	System.out.println( rs.getString(DBSchema.PositionTrackingTable.TIMESTAMP) + "; " );
             	
             }
             pstmt.close();

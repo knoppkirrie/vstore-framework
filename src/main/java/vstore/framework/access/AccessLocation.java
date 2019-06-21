@@ -11,7 +11,7 @@ import ch.hsr.geohash.queries.GeoHashCircleQuery;
  */
 public class AccessLocation {
 	
-	public static final int CIRCLE_RADIUS = 1000;
+	public static final int CIRCLE_RADIUS = 9000;
 	public static final int TIME_THRESHOLD = 120;
 
 	private String id;

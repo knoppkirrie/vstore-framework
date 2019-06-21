@@ -34,7 +34,7 @@ public class FileAccessDBHelper {
 		if (loc != null) {
 			double lat = loc.getLatLng().getLatitude();
 			double lng = loc.getLatLng().getLongitude();
-			GeoHash geohash = GeoHash.withCharacterPrecision(lat, lng, 12);
+			GeoHash geohash = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
 			
 			geohashString = geohash.toBase32();
 		}

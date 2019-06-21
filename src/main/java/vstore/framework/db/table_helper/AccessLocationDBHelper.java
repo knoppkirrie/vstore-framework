@@ -12,6 +12,9 @@ import vstore.framework.db.DBSchema;
 import vstore.framework.db.row_wrapper.AccessLocationRowWrapper;
 
 public class AccessLocationDBHelper {
+	
+	/** The number of characters to compare two GeoHashes with each other */
+	public static final int GEOHASH_MATCHING_CHARACTER_PRECISION = 5;
 
 	public static void insertAccessLocation(AccessLocation al) throws SQLException {
 		
@@ -93,17 +96,25 @@ public class AccessLocationDBHelper {
 		return result;
 	}
 	
+	/**
+	 * Gets AccessLocations from DB that match the GeoHash value of the parameter
+	 * @param geo the GeoHash to match against
+	 * @return a list of all matching AccessLocations from the database
+	 * @throws SQLException
+	 */
 	public static ArrayList<AccessLocation> getAccessLocationsForLocation(GeoHash geo) throws SQLException {
 		ArrayList<AccessLocation> res = new ArrayList<AccessLocation>();
 		if (geo == null) return res;
+		
+		String geoString = geo.toBase32().substring(0, GEOHASH_MATCHING_CHARACTER_PRECISION);
 
 		String sql = "SELECT * FROM " + DBSchema.AccessLocationTable.__NAME
 				+ " WHERE "
-				+ DBSchema.AccessLocationTable.GEOHASH + " = ? ";
+				+ DBSchema.AccessLocationTable.GEOHASH + " LIKE ? ";
 		
 		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
 			
-			pstmt.setString(1, geo.toBase32());
+			pstmt.setString(1, geoString + "%");
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {

@@ -14,7 +14,7 @@ import vstore.framework.db.row_wrapper.AccessLocationRowWrapper;
 public class AccessLocationDBHelper {
 	
 	/** The number of characters to compare two GeoHashes with each other */
-	public static final int GEOHASH_MATCHING_CHARACTER_PRECISION = 5;
+	public static final int GEOHASH_MATCHING_CHARACTER_PRECISION = 4;
 
 	public static void insertAccessLocation(AccessLocation al) throws SQLException {
 		
@@ -128,6 +128,30 @@ public class AccessLocationDBHelper {
 		return res;
 	}
 	
+	public static String getFileIdForAccessLocation(String accessLocationId) throws SQLException{
+
+		String res = "";
+		
+		String sql = "SELECT " + DBSchema.AccessLocationTable.FILE + " FROM " 
+				+ DBSchema.AccessLocationTable.__NAME 
+				+ " WHERE "
+				+ DBSchema.AccessLocationTable.ID + " = ? ";
+		
+		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
+			
+			pstmt.setString(1, accessLocationId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				res = rs.getString(DBSchema.AccessLocationTable.ID);
+			}
+			
+		}
+		
+		
+		return res;
+	}
 	
 	
 	

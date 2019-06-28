@@ -7,17 +7,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeMap;
 
 import ch.hsr.geohash.GeoHash;
+import vstore.framework.VStore;
 import vstore.framework.access.AccessLocation;
 import vstore.framework.access.TimeOfWeek;
-import vstore.framework.context.PositionTracking.PositionTrackingPoint;
-import vstore.framework.context.types.location.VLatLng;
 import vstore.framework.context.types.location.VLocation;
 import vstore.framework.db.table_helper.AccessLocationDBHelper;
-import vstore.framework.db.table_helper.PositionTrackingDBHelper;
-import vstore.framework.exceptions.DatabaseException;
 
 public class ContextManager {
     /**
@@ -172,9 +168,14 @@ public class ContextManager {
     }
     
     public void initializePositionTracking() {
+    	
     	Timer t = new Timer();
         TrackingTask tracker = instance.new TrackingTask();
-        t.scheduleAtFixedRate(tracker, 0, 1000 * 60 * ContextManager.TRACKING_INTERVAL);	// transform minutes to milliseconds
+        t.scheduleAtFixedRate(tracker, 1000, /* 1000 * 60 * ContextManager.TRACKING_INTERVAL */ 1000);	// transform minutes to milliseconds
+        
+        System.out.println("Timer scheduled");
+        
+        
     }
 
     /**
@@ -182,20 +183,63 @@ public class ContextManager {
      * 
      */
     class TrackingTask extends TimerTask {
-
+    	
 		@Override
 		public void run() {
-			// Put position with timestamp into DB
-			try {
-				PositionTrackingDBHelper.insertLocation( ContextManager.get().getCurrentContext().getLocationContext() );
-//				System.out.println("Location stored.");
-			} catch (SQLException e) {
-				System.out.println("Location storing failed:");
-				e.printStackTrace();
-			} catch (DatabaseException e) {
-//				e.printStackTrace();
-//				System.out.println("Location was null... nothing stored.");
+		
+			// TODO: when running as separate Thread, loc always is null 
+			// --> first time works, from then on loc == null
+		
+			VLocation loc = ContextManager.get().getCurrentContext().getLocationContext();
+			
+			if (loc == null) {
+				System.out.println("LOCATION NULL -- ABORT");
+				return;
 			}
+
+			TimeOfWeek tow = new TimeOfWeek( loc.getTimestamp() ); // TimeOfWeek of location measurement
+			
+			// calculate score for this location:
+			HashMap<String, Double> scoreMap = ContextManager.get().getPositionScores(loc, tow);
+			
+			// go through Map and remove all AccessLocations below threshold
+			System.out.println("HashMap size before sorting out: " + scoreMap.size());
+			
+			Iterator it = scoreMap.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry<String, Double> pair = (Map.Entry<String, Double>)it.next();
+		        
+		        if (pair.getValue() < REPLICATION_SCORE_THRESHOLD) {
+		        	it.remove();
+		        	System.out.println("Entry removed (Id: " + pair.getKey() + ")");
+		        }
+
+		        System.out.println(pair.getKey() + " = " + pair.getValue());
+		    }
+			
+		    System.out.println("HashMap size after sorting out: " + scoreMap.size());
+
+		    if (scoreMap.size() == 0) return;	// no matching accessLocations are being approached
+
+		    it = scoreMap.entrySet().iterator();
+		    while (it.hasNext()) {
+		    	Map.Entry<String, Double> pair = (Map.Entry<String, Double>)it.next();
+		    	String file = "";
+		    	
+		    	try {
+					file = AccessLocationDBHelper.getFileIdForAccessLocation(pair.getKey());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		    	
+		    	if (VStore.getInstance().getFileManager().isMyFile(file) ) return;	// user owns this file; no replication needed
+		    	
+		    	// TODO: trigger replication 
+		    }
+		    
+		   
+			// TODO: detecting AccessLocations not only for own requested files, but also from others?
+
 		}
     }
     

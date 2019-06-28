@@ -144,7 +144,7 @@ public class AccessLocationDBHelper {
 			ResultSet rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
-				res = rs.getString(DBSchema.AccessLocationTable.ID);
+				res = rs.getString(DBSchema.AccessLocationTable.FILE);
 			}
 			
 		}

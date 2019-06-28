@@ -128,9 +128,10 @@ public class ContextManager {
     /**
      * Calculates a probability score for the current VLocation that suggests if a FileAccess may be upcoming or not 
      * @param loc the current VLocation.
+     * @param tow the TimeOfWeek object of the location measurement
      * @return a Map<String, Double> with AccessLocation.Id as Key, the score as value 
      */
-    public HashMap<String, Double> getPositionScores(VLocation loc) {
+    public HashMap<String, Double> getPositionScores(VLocation loc, TimeOfWeek tow) {
   
     	HashMap<String, Double> scoreMap = new HashMap<String, Double>();
     	
@@ -140,7 +141,7 @@ public class ContextManager {
     	double lng = loc.getLatLng().getLongitude();
     	GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
     	
-    	TimeOfWeek now = new TimeOfWeek();
+//    	TimeOfWeek now = new TimeOfWeek();
     	
     	
     	try {
@@ -149,12 +150,12 @@ public class ContextManager {
 		
 			for (AccessLocation al: alList) {
 				
-				if (al.contains(geo.toBase32()) && Math.abs( al.getMeanToW().getMinuteDiff(now) ) < AccessLocation.TIME_THRESHOLD) {
+				if (al.contains(geo.toBase32()) && Math.abs( al.getMeanToW().getMinuteDiff(tow) ) < AccessLocation.TIME_THRESHOLD) {
 					// location is near known AccessLocation and within timeThreshold window
 					double meters = al.getDistance(geo);
-					int minutes = al.getMeanToW().getMinuteDiff(now);
+					int minutes = al.getMeanToW().getMinuteDiff(tow);
 					
-					double score = ( (meters / AccessLocation.CIRCLE_RADIUS) + (Math.abs(minutes) / AccessLocation.TIME_THRESHOLD) ) / 2;
+					double score = ( (meters / AccessLocation.CIRCLE_RADIUS) + ( (float) Math.abs(minutes) / AccessLocation.TIME_THRESHOLD) ) / 2;
 					
 					// TODO: penalty if meanToW has already passed?
 					
@@ -167,7 +168,7 @@ public class ContextManager {
 			e.printStackTrace();
 		}
     	
-    	return (1 - score);
+    	return scoreMap;
     }
     
     public void initializePositionTracking() {

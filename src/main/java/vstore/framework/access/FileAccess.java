@@ -16,6 +16,22 @@ public class FileAccess {
 		this.fileUuid = fileUuid;
 		this.geohash = geohash;
 		this.timeOfWeek = tow;
-		
 	}
+
+	
+	// Getters
+	
+	public String getFileUuid() {
+		return fileUuid;
+	}
+
+	public GeoHash getGeohash() {
+		return geohash;
+	}
+
+	public TimeOfWeek getTimeOfWeek() {
+		return timeOfWeek;
+	}
+	
+	
 }

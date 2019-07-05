@@ -122,7 +122,8 @@ public class ContextManager {
     }
     
     /**
-     * Calculates a probability score for the current VLocation that suggests if a FileAccess may be upcoming or not 
+     * Calculates a probability score for the current VLocation that suggests if a FileAccess may be upcoming or not in 
+     * known AccessLocations
      * @param loc the current VLocation.
      * @param tow the TimeOfWeek object of the location measurement
      * @return a Map<String, Double> with AccessLocation.Id as Key, the score as value 
@@ -136,9 +137,6 @@ public class ContextManager {
     	double lat = loc.getLatLng().getLatitude();
     	double lng = loc.getLatLng().getLongitude();
     	GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
-    	
-//    	TimeOfWeek now = new TimeOfWeek();
-    	
     	
     	try {
     		
@@ -167,21 +165,27 @@ public class ContextManager {
     	return scoreMap;
     }
     
-    public void initializePositionTracking() {
-    	
-    	Timer t = new Timer();
-        TrackingTask tracker = instance.new TrackingTask();
-        t.scheduleAtFixedRate(tracker, 1000, /* 1000 * 60 * ContextManager.TRACKING_INTERVAL */ 1000);	// transform minutes to milliseconds
-        
-        System.out.println("Timer scheduled");
-        
-        
-    }
+//	DEPRECATED ?
+//    
+//    public void initializePositionTracking() {
+//    	
+//    	Timer t = new Timer();
+//        TrackingTask tracker = instance.new TrackingTask();
+//        t.scheduleAtFixedRate(tracker, 1000, /* 1000 * 60 * ContextManager.TRACKING_INTERVAL */ 1000);	// transform minutes to milliseconds
+//        
+//        System.out.println("Timer scheduled");
+//        
+//    }
 
+    
+    
     /**
      * Is responsible for tracking the device's location and save it into the DB
      * 
      */
+    
+    /* DEPRECATED ?
+     
     class TrackingTask extends TimerTask {
     	
 		@Override
@@ -221,6 +225,8 @@ public class ContextManager {
 
 		    if (scoreMap.size() == 0) return;	// no matching accessLocations are being approached
 
+		    
+		    // check which files match upcoming location and time
 		    it = scoreMap.entrySet().iterator();
 		    while (it.hasNext()) {
 		    	Map.Entry<String, Double> pair = (Map.Entry<String, Double>)it.next();
@@ -238,9 +244,10 @@ public class ContextManager {
 		    }
 		    
 		   
-			// TODO: detecting AccessLocations not only for own requested files, but also from others?
+			// TODO: detecting AccessLocations not only for own requested files, but also from others
 
 		}
     }
+    */
     
 }

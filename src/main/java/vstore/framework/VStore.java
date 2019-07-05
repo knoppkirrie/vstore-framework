@@ -129,9 +129,9 @@ public class VStore {
             mInstance = new VStore(baseDir, masterNodeAddress);
         }
         
-        // Initialize PositionTracking
-        ContextManager.get().initializePositionTracking();        
-        
+//        DEPRECATED ?
+//        // Initialize PositionTracking
+//        ContextManager.get().initializePositionTracking();          
     }
 
     /**

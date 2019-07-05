@@ -206,7 +206,7 @@ public class TimeOfWeek {
 		}	
 		
 		int minuteDiff = 0;
-		// get mininal distance in minutes between both objects
+		// get minimal distance in minutes between both objects
 		if ( (latter.getTotalMinutes() - earlier.getTotalMinutes()) > 5040 ) {
 			// go the other way round:
 			int minutesForward = 0;
@@ -230,7 +230,7 @@ public class TimeOfWeek {
 	/**
 	 * @return the total count of minutes into the week until this TimeOfWeek object
 	 */
-	private int getTotalMinutes() {
+	public int getTotalMinutes() {
 		return dayOfWeek * 24 * 60 + hour * 60 + minute;
 	}
 	

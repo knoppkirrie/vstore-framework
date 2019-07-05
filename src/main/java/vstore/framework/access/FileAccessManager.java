@@ -1,12 +1,10 @@
 package vstore.framework.access;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import ch.hsr.geohash.GeoHash;
 import vstore.framework.context.ContextManager;
-import vstore.framework.db.table_helper.AccessLocationDBHelper;
-import vstore.framework.utils.IdentifierUtils;
+import vstore.framework.db.table_helper.FileAccessDBHelper;
 
 public class FileAccessManager {
 
@@ -31,6 +29,9 @@ public class FileAccessManager {
         return instance;
 	}
 	
+	/*
+	 * TODO: makes sense only with fileUuid as parameter, without location?
+	 
 	private void updateMeanAccessTime(String fileUuid, long timestamp) {
 		// TODO
 	}
@@ -39,7 +40,13 @@ public class FileAccessManager {
 		// TODO
 		return null;
 	}
+	*/
 	
+	/**
+	 * Logs a get()-request of a file via the vStore-framework into the local database
+	 * @param fileUuid the Uuid of the requested file
+	 * @param timestamp timestamp when the request occurs
+	 */
 	public void newAccess(String fileUuid, long timestamp) {
 		
 		// return if no location context available; location comparison seems pointless without location
@@ -53,6 +60,17 @@ public class FileAccessManager {
 		
 		FileAccess fa = new FileAccess(fileUuid, geo, tow);
 		
+		
+		// insert fileAccess into local DB
+		
+		try {
+			FileAccessDBHelper.insertFileAccess(fa, "get");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		/* DEPRECATED ?
 		// check if access for this file and Context().Location (as geohash) is already present in DB
 		
 		try {
@@ -91,10 +109,9 @@ public class FileAccessManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		
 		// TODO: --> "confidence level" for Location/TimeOfWeek combinations?
-		
+		*/
 		
 	}
 	

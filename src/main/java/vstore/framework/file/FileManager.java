@@ -210,16 +210,8 @@ public class FileManager {
         }
         final String requestId = UUID.randomUUID().toString();
         
-        // store FileAccess to database with current location and timeOfWeek to database
-//        try {
-//        	FileAccessDBHelper.insertFileAccess(uuid, ContextManager.get().getCurrentContext().getLocationContext(), DBSchema.FileAccess.TypeOfAccess.GET);
-        	FileAccessManager.get().newAccess(uuid, System.currentTimeMillis() );
-        	
-        	
-//        } catch(SQLException e){
-//        	e.printStackTrace();
-//        }
-               
+        // store FileAccess with current location and timeOfWeek to database
+        FileAccessManager.get().newAccess(uuid, System.currentTimeMillis() );
 
         VStoreFile f = null;
         //Check if it is my own file. If it is, then serve from local storage.

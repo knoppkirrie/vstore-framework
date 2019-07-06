@@ -151,9 +151,10 @@ public class DBSchema {
     	public static final String GEOHASH = "geohash";	// TEXT
     	public static final String TIMEOFWEEK = "timeOfWeek";	// TEXT NOT NULL
 //    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
-    	public static final String TYPE = "type";	// TEXT NOT NULL
+//    	public static final String TYPE = "type";	// TEXT NOT NULL
+    	public static final String TOTALMINUTES = "totalMinutes";
     	
-    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TYPE};
+    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TOTALMINUTES};
     	
     	public static final class TypeOfAccess {
     		public static final String STORE = "store";

@@ -64,7 +64,7 @@ public class FileAccessManager {
 		// insert fileAccess into local DB
 		
 		try {
-			FileAccessDBHelper.insertFileAccess(fa, "get");
+			FileAccessDBHelper.insertFileAccess(fa);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -14,7 +14,7 @@ public class FileAccessDBHelper {
 	 * Inserts a FileAccess object into the database with the current TimeOfWeek parameter
 	 * @param file the VStoreFile that has been accessed
 	 */
-	public static void insertFileAccess(FileAccess fa, String type) throws SQLException {
+	public static void insertFileAccess(FileAccess fa) throws SQLException {
 		
 		String sql = "INSERT INTO "
 				+ DBSchema.FileAccessTable.__NAME + " ("
@@ -22,7 +22,7 @@ public class FileAccessDBHelper {
 				+ DBSchema.FileAccessTable.FILE + ", "
 				+ DBSchema.FileAccessTable.GEOHASH + ", "
 				+ DBSchema.FileAccessTable.TIMEOFWEEK + ", "
-				+ DBSchema.FileAccessTable.TYPE + ")"
+				+ DBSchema.FileAccessTable.TOTALMINUTES + ")"
 				+ " VALUES (?,?,?,?,?)";
 		
 		
@@ -31,7 +31,7 @@ public class FileAccessDBHelper {
 			pstmt.setString(2, fa.getFileUuid());
 			pstmt.setString(3, fa.getGeohash().toBase32());
 			pstmt.setString(4, fa.getTimeOfWeek().toString());
-			pstmt.setString(5, type);
+			pstmt.setInt(5, fa.getTimeOfWeek().getTotalMinutes());
 			
 			pstmt.execute();
             pstmt.close();

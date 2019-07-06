@@ -176,7 +176,7 @@ public class DBHelper {
 	        		DBSchema.FileAccessTable.FILE + " TEXT NOT NULL," + 
 	        		DBSchema.FileAccessTable.GEOHASH + " TEXT," + 
 	        		DBSchema.FileAccessTable.TIMEOFWEEK + " TEXT NOT NULL," + 
-	        		DBSchema.FileAccessTable.TYPE + " TEXT NOT NULL)");
+	        		DBSchema.FileAccessTable.TOTALMINUTES + " INTEGER NOT NULL)");
 	        
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.AccessLocationTable.__NAME + "(" +
 	        		DBSchema.AccessLocationTable.ID + " TEXT PRIMARY KEY NOT NULL," +

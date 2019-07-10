@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import vstore.framework.access.FileAccessManager;
 import vstore.framework.communication.download.DownloadMode;
 import vstore.framework.communication.download.PersistentDownloadList;
 import vstore.framework.communication.download.events.DownloadFailedEvent;
@@ -121,6 +122,9 @@ public class DownloadHandler extends Thread {
                 continue;
             }
 
+            // log FileAccess with ID of node where file was downloaded from
+            FileAccessManager.get().newAccess(fileId, System.currentTimeMillis(), n.getIdentifier());
+            
             //Publish event about the finished download
             DownloadedFileReadyEvent evt = new DownloadedFileReadyEvent();
             evt.file = dlFile;
@@ -150,6 +154,10 @@ public class DownloadHandler extends Thread {
     }
 
     private VStoreFile downloadFromSpecifiedNode() {
+    	
+    	// log FileAccess with ID of node where file was downloaded from
+        FileAccessManager.get().newAccess(fileId, System.currentTimeMillis(), nodeInfo.getIdentifier());
+    	
         try {
             FileDownloadCallable callable = new FileDownloadCallable(fileId, nodeInfo, targetDir, requestId, false);
             return callable.call();

@@ -211,7 +211,7 @@ public class FileManager {
         final String requestId = UUID.randomUUID().toString();
         
         // store FileAccess with current location and timeOfWeek to database
-        FileAccessManager.get().newAccess(uuid, System.currentTimeMillis() );
+//        FileAccessManager.get().newAccess(uuid, System.currentTimeMillis() );
 
         VStoreFile f = null;
         //Check if it is my own file. If it is, then serve from local storage.
@@ -224,6 +224,11 @@ public class FileManager {
 //                System.out.println("FILE FOUND LOCALLY");
                 if(f != null)
                 {
+                	
+                	// store FileAccess with current location and timeOfWeek to database
+                	String nodeId = FileAccessDBHelper.getNodeForFile(uuid);
+                    FileAccessManager.get().newAccess(uuid, System.currentTimeMillis(), nodeId );
+                	
                     DownloadedFileReadyEvent evt = new DownloadedFileReadyEvent();
                     evt.file = f;
                     evt.requestId = requestId;
@@ -239,6 +244,9 @@ public class FileManager {
         }
 
         //File not found locally. Use download handler.
+        
+        // TODO: Create new FileAccess obj for files from remote nodes
+        // --> get nodeId somewhere from inside download handler
         System.out.print("FILE NOT FOUND LOCALLY. DOWNLOAD STARTED: ");
         System.out.println( Downloader.downloadFile(uuid, requestId, dir) );
     }

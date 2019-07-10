@@ -152,9 +152,11 @@ public class DBSchema {
     	public static final String TIMEOFWEEK = "timeOfWeek";	// TEXT NOT NULL
 //    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
 //    	public static final String TYPE = "type";	// TEXT NOT NULL
-    	public static final String TOTALMINUTES = "totalMinutes";
+    	public static final String TOTALMINUTES = "totalMinutes";	// INTEGER
+    	public static final String IS_UPLOADED = "isUploaded";	// INTEGER
+    	public static final String NODE_ID = "nodeId";	// TEXT
     	
-    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TOTALMINUTES};
+    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TOTALMINUTES, IS_UPLOADED, NODE_ID};
     	
     	public static final class TypeOfAccess {
     		public static final String STORE = "store";

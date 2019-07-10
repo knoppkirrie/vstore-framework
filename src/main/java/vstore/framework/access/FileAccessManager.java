@@ -46,8 +46,9 @@ public class FileAccessManager {
 	 * Logs a get()-request of a file via the vStore-framework into the local database
 	 * @param fileUuid the Uuid of the requested file
 	 * @param timestamp timestamp when the request occurs
+	 * @param nodeId ID of the storage node where the requested file is stored
 	 */
-	public void newAccess(String fileUuid, long timestamp) {
+	public void newAccess(String fileUuid, long timestamp, String nodeId) {
 		
 		// return if no location context available; location comparison seems pointless without location
 		if (ContextManager.get().getCurrentContext().getLocationContext() == null) return;
@@ -58,7 +59,7 @@ public class FileAccessManager {
 		GeoHash geo = GeoHash.withCharacterPrecision(lat, lng, ContextManager.GEOHASH_PRECISION);
 		TimeOfWeek tow = new TimeOfWeek(timestamp);
 		
-		FileAccess fa = new FileAccess(fileUuid, geo, tow);
+		FileAccess fa = new FileAccess(fileUuid, geo, tow, nodeId);
 		
 		
 		// insert fileAccess into local DB

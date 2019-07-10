@@ -15,6 +15,7 @@ public final class ApiConstants {
         public static final String ROUTE_FILES_MATCHING_CONTEXT = "/file/search";
         public static final String ROUTE_NODE_UUID = "/uuid";
         public static final String ROUTE_THUMBNAIL = "/thumbnail";
+        public static final String ROUTE_ACCESS_INSERT = "/fileAccess/insert";
     }
 
     public final class MasterNode {

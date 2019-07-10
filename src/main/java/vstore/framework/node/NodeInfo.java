@@ -17,6 +17,7 @@ import static vstore.framework.communication.ApiConstants.StorageNode.ROUTE_FILE
 import static vstore.framework.communication.ApiConstants.StorageNode.ROUTE_FILE_MIMETYPE;
 import static vstore.framework.communication.ApiConstants.StorageNode.ROUTE_NODE_UUID;
 import static vstore.framework.communication.ApiConstants.StorageNode.ROUTE_THUMBNAIL;
+import static vstore.framework.communication.ApiConstants.StorageNode.ROUTE_ACCESS_INSERT;
 
 /**
  * This class holds information about one single storage node.
@@ -212,6 +213,10 @@ public class NodeInfo implements Serializable {
         } else {
             return getBaseUri() + ROUTE_FILE_METADATA_LIGHT + "/" + uuid + "/" + phoneID;
         }
+    }
+    
+    public String getInsertAccessUri() {
+    	return getBaseUri() + ROUTE_ACCESS_INSERT;
     }
 
     /**

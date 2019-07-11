@@ -10,7 +10,6 @@ import vstore.framework.access.FileAccess;
 import vstore.framework.db.DBHelper;
 import vstore.framework.db.DBSchema;
 import vstore.framework.db.row_wrapper.FileAccessRowWrapper;
-import vstore.framework.utils.IdentifierUtils;
 
 public class FileAccessDBHelper {
 
@@ -97,6 +96,38 @@ public class FileAccessDBHelper {
 		}
 		
 		return res;
+	}
+	
+	/**
+	 * Updates all FileAccess objects of a given list as "uploaded" in the local database 
+	 * @param faList the list of FileAccess objects
+	 * @throws SQLException
+	 */
+	public static void setAsUploaded(List<FileAccess> faList) throws SQLException {
+		
+		if (faList == null || faList.size() == 0) return;
+		
+		String sql = "UPDATE " + DBSchema.FileAccessTable.__NAME 
+				+ " SET " + DBSchema.FileAccessTable.IS_UPLOADED + " = 1"
+				+ " WHERE " + DBSchema.FileAccessTable.ID + " = ";
+		
+		for (int i = 0; i < faList.size(); i++) {
+			sql += "?";
+			if (i < faList.size() - 1) {
+				sql += " OR " + DBSchema.FileAccessTable.ID + " = ";
+			}
+		}
+				
+		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
+//			pstmt.setInt(1, 1);
+			
+			for (int i = 0; i < faList.size(); i++) {
+				pstmt.setString(i+1, faList.get(i).getUuid());
+			}
+			
+			pstmt.execute();
+			pstmt.close();
+		}
 		
 	}
 	

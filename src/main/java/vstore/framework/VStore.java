@@ -131,7 +131,9 @@ public class VStore {
         
 //        DEPRECATED ?
 //        // Initialize PositionTracking
-//        ContextManager.get().initializePositionTracking();          
+//        ContextManager.get().initializePositionTracking();        
+        
+        // TODO: include routine (once per day/hour) for uploading FileAccess to remote nodes
     }
 
     /**

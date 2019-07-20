@@ -16,6 +16,7 @@ import vstore.framework.access.FileAccess;
 import vstore.framework.db.table_helper.FileAccessDBHelper;
 import vstore.framework.db.table_helper.NodeDBHelper;
 import vstore.framework.node.NodeInfo;
+import vstore.framework.utils.IdentifierUtils;
 
 /**
  * Responsible for Uploading all FileAccess objects to the corresponding storage nodes.
@@ -57,6 +58,7 @@ public class InsertAccessThread extends Thread {
 			jsonFA.put("geohash", fa.getGeohash().toBase32());
 			jsonFA.put("timeOfWeek", fa.getTimeOfWeek().toString());
 			jsonFA.put("totalMinutes", fa.getTimeOfWeek().getTotalMinutes());
+			jsonFA.put("deviceId", IdentifierUtils.getDeviceIdentifier());
 			
 			jsonArray.add(jsonFA);
 		}

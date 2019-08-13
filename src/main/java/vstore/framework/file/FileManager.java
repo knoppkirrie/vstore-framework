@@ -245,10 +245,9 @@ public class FileManager {
 
         //File not found locally. Use download handler.
         
-        // TODO: Create new FileAccess obj for files from remote nodes
-        // --> get nodeId somewhere from inside download handler
-        System.out.print("FILE NOT FOUND LOCALLY. DOWNLOAD STARTED: ");
-        System.out.println( Downloader.downloadFile(uuid, requestId, dir) );
+//        System.out.print("FILE NOT FOUND LOCALLY. DOWNLOAD STARTED: ");
+//        System.out.println( Downloader.downloadFile(uuid, requestId, dir) );
+        Downloader.downloadFile(uuid, requestId, dir);
     }
 
     /**

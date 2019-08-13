@@ -3,6 +3,9 @@ package vstore.framework.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import vstore.framework.context.ContextManager;
+import vstore.framework.context.types.location.VLocation;
+
 /**
  * Distance metric class which calculates the distance metric for a storage node.
  * Provides additional methods for sorting a list of storage nodes by the distance metric
@@ -30,6 +33,41 @@ public class NodeDistanceMetric {
         }
         return 4;
     }
+    
+    /**
+     * Calculates the distance between the currently provided LocationContext and a storage node.
+     * Return value is inversed to enable sorted list to keep its sorting order:
+     * The lower the distance, the higher the returned value.
+     * @param n the storage node 
+     * @return Float.MAX_VALUE - (distance in meters)
+     */
+    public static float getDistance(NodeInfo n) {
+    	VLocation currentPos = ContextManager.get().getCurrentContext().getLocationContext();
+    	
+    	// if no location context is provided, fallback to distance metric
+    	if (currentPos == null) {
+    		return getDistanceMetric(n);
+    	}
+    	
+    	double nodeLat = n.getLatLng().getLatitude();
+    	double nodeLng = n.getLatLng().getLongitude();
+    	double currentLat = currentPos.getLatLng().getLatitude();
+    	double currentLng = currentPos.getLatLng().getLongitude();
+    	
+    	// use haversine formula to calculate distance between both LatLng pairs
+    	final int R = 6371000;	// earth radius in meters
+		double rho1 = Math.toRadians(currentLat);
+		double rho2 = Math.toRadians(nodeLat);
+		double deltaRho = Math.toRadians(currentLat - nodeLat);
+		double deltaLambda = Math.toRadians(currentLng - nodeLng);
+		
+		double a = Math.sin(deltaRho / 2) * Math.sin(deltaRho / 2) 
+					+ Math.cos(rho1) * Math.cos(rho2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		
+		return (float) (R * c);
+    	
+    }
 
     /**
      * Sorts the given list by the distance metric.
@@ -41,18 +79,39 @@ public class NodeDistanceMetric {
         for(NodeInfo n : nodeInfos)
         {
             //Calculate distance metric for each node
-            float distanceMetric = getDistanceMetric(n);
+//            float distanceMetric = getDistanceMetric(n);
+        	
+        	// Instead: Use actual distance instead of metric value to select spatially nearest node
+        	float distanceMetric = getDistance(n);	
+        	
             n.setDistanceMetric(distanceMetric);
 
             int pos = 0;
-            //Add it sorted into the list (highest to lowest score)
-            while(pos < sortedNodes.size())
-            {
-                if(sortedNodes.get(pos).getDistanceMetric() < distanceMetric) break;
-                ++pos;
+            
+            //Add it sorted into the list 
+            if (ContextManager.get().getCurrentContext().getLocationContext() == null) {
+            	
+            	// no LocationContext available, so we sort by distance metric - high to low
+            	while(pos < sortedNodes.size())
+                {
+                    if(sortedNodes.get(pos).getDistanceMetric() < distanceMetric) break;
+                    ++pos;
+                }
+                sortedNodes.add(pos, n);
+            
+            } else {
+            	
+            	// LocationContext is available, so we sort by actual distance - low to high
+            	while(pos < sortedNodes.size())
+                {
+                    if(sortedNodes.get(pos).getDistanceMetric() > distanceMetric) break;
+                    ++pos;
+                }
+                sortedNodes.add(pos, n);
+            
             }
-            sortedNodes.add(pos, n);
         }
+        
         return sortedNodes;
     }
 

@@ -3,6 +3,7 @@ package vstore.framework.access;
 import java.sql.SQLException;
 
 import ch.hsr.geohash.GeoHash;
+import vstore.framework.communication.access.FileAccessUploader;
 import vstore.framework.context.ContextManager;
 import vstore.framework.db.table_helper.FileAccessDBHelper;
 
@@ -27,6 +28,10 @@ public class FileAccessManager {
             initialize();
         }
         return instance;
+	}
+	
+	public FileAccessUploader getFileAccessUploader() {
+		return FileAccessUploader.get();
 	}
 	
 	/*

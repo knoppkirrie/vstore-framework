@@ -187,6 +187,13 @@ public class VStore {
     public NodeManager getNodeManager() { return NodeManager.get(); }
 
     /**
+     * @return The FileAccessManager can be used for operations regarding FileAccess objects.
+     */
+    public FileAccessManager getFileAccessManager() {
+    	return FileAccessManager.get();
+    }
+    
+    /**
      * This method returns the usage context currently used for matching.
      * If you want to refresh it, use {@link VStore#provideContext(ContextDescription)}
      *
@@ -273,7 +280,7 @@ public class VStore {
         }
         
         File file = new File(fileUri);
-               System.out.println(file.getAbsolutePath());
+//               System.out.println(file.getAbsolutePath());
         //Generate new UUID for file
         String uuid = UUID.randomUUID().toString();
         String descriptiveName = file.getName();

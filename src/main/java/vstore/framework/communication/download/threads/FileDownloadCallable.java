@@ -184,7 +184,7 @@ public class FileDownloadCallable implements Callable<VStoreFile> {
             sink.writeAll(binFile);
             sink.close();
 
-            System.out.println("vStore: Finished downloading file " + fileUuid);
+//            System.out.println("vStore: Finished downloading file " + fileUuid);
 
             //Remove file from download list
             PersistentDownloadList.deleteFileDownloading(fileUuid);

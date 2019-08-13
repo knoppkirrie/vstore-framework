@@ -36,10 +36,9 @@ public class NodeDistanceMetric {
     
     /**
      * Calculates the distance between the currently provided LocationContext and a storage node.
-     * Return value is inversed to enable sorted list to keep its sorting order:
-     * The lower the distance, the higher the returned value.
+     * If no LocationContext is available, fallback to {@link #getDistanceMetric(NodeInfo) getDistanceMetric}.
      * @param n the storage node 
-     * @return Float.MAX_VALUE - (distance in meters)
+     * @return distance in kilometers
      */
     public static float getDistance(NodeInfo n) {
     	VLocation currentPos = ContextManager.get().getCurrentContext().getLocationContext();

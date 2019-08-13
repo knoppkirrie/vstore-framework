@@ -76,18 +76,26 @@ public class DownloadHandler extends Thread {
     }
 
     private VStoreFile downloadBasedOnMetric() {
-        //First: Check local file<->node mapping
-        List<String> nodeIds = FileNodeMapper.getMapper().getNodeIds(fileId);
-
-        if(nodeIds.size() == 0) {
-            //Contact master node for mapping
-            nodeIds = MasterNode.getFileNodeMapping(fileId);
-            if(nodeIds == null || nodeIds.size() == 0) {
-                downloadFailed(new Exception("No node found for the file."));
-                return null;
-            }
+        // Refresh FileNodeMapping from MasterNode
+    	List<String> nodeIds = MasterNode.getFileNodeMapping(fileId);
+        if(nodeIds == null || nodeIds.size() == 0) {
+            downloadFailed(new Exception("No node found for the file."));
+            return null;
         }
-
+    	
+        // DEPRECATED: Download from known node if previously local mapping was available, regardless of distance
+//    	//First: Check local file<->node mapping
+//        List<String> nodeIds = FileNodeMapper.getMapper().getNodeIds(fileId);
+//
+//        if(nodeIds.size() == 0) {
+//            //Contact master node for mapping
+//            nodeIds = MasterNode.getFileNodeMapping(fileId);
+//            if(nodeIds == null || nodeIds.size() == 0) {
+//                downloadFailed(new Exception("No node found for the file."));
+//                return null;
+//            }
+//        }
+        
         if(nodeIds.size() == 1)
         {
             //Start download from the only node available

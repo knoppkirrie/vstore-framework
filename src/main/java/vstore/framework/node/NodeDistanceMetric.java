@@ -44,29 +44,13 @@ public class NodeDistanceMetric {
     public static float getDistance(NodeInfo n) {
     	VLocation currentPos = ContextManager.get().getCurrentContext().getLocationContext();
     	
+    	
     	// if no location context is provided, fallback to distance metric
     	if (currentPos == null) {
     		return getDistanceMetric(n);
     	}
     	
-    	double nodeLat = n.getLatLng().getLatitude();
-    	double nodeLng = n.getLatLng().getLongitude();
-    	double currentLat = currentPos.getLatLng().getLatitude();
-    	double currentLng = currentPos.getLatLng().getLongitude();
-    	
-    	// use haversine formula to calculate distance between both LatLng pairs
-    	final int R = 6371000;	// earth radius in meters
-		double rho1 = Math.toRadians(currentLat);
-		double rho2 = Math.toRadians(nodeLat);
-		double deltaRho = Math.toRadians(currentLat - nodeLat);
-		double deltaLambda = Math.toRadians(currentLng - nodeLng);
-		
-		double a = Math.sin(deltaRho / 2) * Math.sin(deltaRho / 2) 
-					+ Math.cos(rho1) * Math.cos(rho2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		
-		return (float) (R * c);
-    	
+    	return n.getGeographicDistanceTo(currentPos.getLatLng());
     }
 
     /**

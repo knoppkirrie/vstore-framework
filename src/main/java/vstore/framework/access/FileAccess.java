@@ -16,7 +16,7 @@ public class FileAccess {
 	private boolean isUploaded;
 	private String nodeId;
 	
-	public FileAccess(String fileUuid, GeoHash geohash, /* TimeOfWeek tow, */ long timestamp, String nodeId) {
+	public FileAccess(String fileUuid, GeoHash geohash, long timestamp, String nodeId) {
 		this.uuid = IdentifierUtils.getNewUniqueIdentifier();
 		this.fileUuid = fileUuid;
 		this.geohash = geohash;

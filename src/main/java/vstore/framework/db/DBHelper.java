@@ -116,8 +116,7 @@ public class DBHelper {
 	                DBSchema.FilesTable.NODEUUID + " TEXT, " +
                     DBSchema.FilesTable.STORED_NODES + " TEXT," +
 	                DBSchema.FilesTable.CONTEXTJSON + " TEXT," +
-	                DBSchema.FilesTable.DELETE_PENDING + " INTEGER," + 
-	                DBSchema.FilesTable.MEAN_ACCESS_TIME + " TEXT)");
+	                DBSchema.FilesTable.DELETE_PENDING + " INTEGER)");
 	
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.RulesTable.__NAME + "(" +
 	                DBSchema.RulesTable.ID + " TEXT PRIMARY KEY NOT NULL," +

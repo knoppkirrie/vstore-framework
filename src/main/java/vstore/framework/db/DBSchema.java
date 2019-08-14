@@ -32,12 +32,10 @@ public class DBSchema {
         public static final String STORED_NODES = "stored_nodes"; // TEXT
         public static final String CONTEXTJSON = "context_json"; // TEXT
         public static final String DELETE_PENDING = "delete_pending"; //INTEGER
-        
-        public static final String MEAN_ACCESS_TIME = "mean_access_time";	// TEXT
 
 		private static final String[] COLUMNS = {UUID, DESCRIPTIVE_NAME, MIME, EXTENSION,
                 DATE_CREATION, SIZE, UPLOAD_PENDING, PRIVATE, NODEUUID, STORED_NODES, CONTEXTJSON, 
-                DELETE_PENDING, MEAN_ACCESS_TIME};
+                DELETE_PENDING};
     }
 
     /**

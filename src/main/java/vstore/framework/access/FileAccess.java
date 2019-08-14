@@ -12,15 +12,15 @@ public class FileAccess {
 	private String uuid;
 	private String fileUuid;
 	private GeoHash geohash;
-	private TimeOfWeek timeOfWeek;
+	private long timestamp;
 	private boolean isUploaded;
 	private String nodeId;
 	
-	public FileAccess(String fileUuid, GeoHash geohash, TimeOfWeek tow, String nodeId) {
+	public FileAccess(String fileUuid, GeoHash geohash, /* TimeOfWeek tow, */ long timestamp, String nodeId) {
 		this.uuid = IdentifierUtils.getNewUniqueIdentifier();
 		this.fileUuid = fileUuid;
 		this.geohash = geohash;
-		this.timeOfWeek = tow;
+		this.timestamp = timestamp;
 		this.isUploaded = false;
 		this.nodeId = nodeId;
 	}
@@ -41,9 +41,9 @@ public class FileAccess {
 	public GeoHash getGeohash() {
 		return geohash;
 	}
-
-	public TimeOfWeek getTimeOfWeek() {
-		return timeOfWeek;
+	
+	public long getTimestamp() {
+		return timestamp;
 	}
 	
 	public String getNodeId() {

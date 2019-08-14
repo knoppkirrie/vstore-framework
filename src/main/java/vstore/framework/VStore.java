@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import vstore.framework.access.FileAccessManager;
 import vstore.framework.communication.CommunicationManager;
 import vstore.framework.communication.RequestFilesMatchingContextThread;
 import vstore.framework.communication.download.Downloader;

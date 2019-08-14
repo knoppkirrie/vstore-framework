@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import ch.hsr.geohash.GeoHash;
 import vstore.framework.access.FileAccess;
-import vstore.framework.access.TimeOfWeek;
 import vstore.framework.db.DBSchema;
 
 public class FileAccessRowWrapper {
@@ -23,14 +22,12 @@ public class FileAccessRowWrapper {
 			String id = rs.getString(DBSchema.FileAccessTable.ID);
 			String file = rs.getString(DBSchema.FileAccessTable.FILE);
 			String geohashString = rs.getString(DBSchema.FileAccessTable.GEOHASH);
-			String towString = rs.getString(DBSchema.FileAccessTable.TIMEOFWEEK);
-//			int totalMinutes = rs.getInt(DBSchema.FileAccessTable.TOTALMINUTES);
+			long timestamp = rs.getLong(DBSchema.FileAccessTable.TIMESTAMP);
 			String node = rs.getString(DBSchema.FileAccessTable.NODE_ID);
 			
-			TimeOfWeek tow = new TimeOfWeek(towString);
 			GeoHash geo = GeoHash.fromGeohashString(geohashString);
 			
-			fa = new FileAccess(file, geo, tow, node);
+			fa = new FileAccess(file, geo, timestamp, node);
 			fa.setUuid(id);
 			
 		} catch (SQLException e) {

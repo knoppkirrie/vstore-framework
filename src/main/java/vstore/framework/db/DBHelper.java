@@ -164,29 +164,13 @@ public class DBHelper {
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.CurrentDownloads.__NAME + "(" +
 	                DBSchema.CurrentDownloads.FILE_UUID + " TEXT PRIMARY KEY NOT NULL)");
 	        
-	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.PositionTrackingTable.__NAME + "(" + 
-	        		DBSchema.PositionTrackingTable.ID + " TEXT PRIMARY KEY NOT NULL," + 
-	        		DBSchema.PositionTrackingTable.LAT + " REAL NOT NULL," + 
-	        		DBSchema.PositionTrackingTable.LNG + " REAL NOT NULL," + 
-	        		DBSchema.PositionTrackingTable.TIMESTAMP + " INTEGER NOT NULL," + 
-	        		DBSchema.PositionTrackingTable.GEOHASH + " TEXT NOT NULL)");
-	        
 	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.FileAccessTable.__NAME + "(" + 
 	        		DBSchema.FileAccessTable.ID + " TEXT PRIMARY KEY NOT NULL," + 
 	        		DBSchema.FileAccessTable.FILE + " TEXT NOT NULL," + 
 	        		DBSchema.FileAccessTable.GEOHASH + " TEXT," + 
-	        		DBSchema.FileAccessTable.TIMEOFWEEK + " TEXT NOT NULL," + 
-	        		DBSchema.FileAccessTable.TOTALMINUTES + " INTEGER NOT NULL," +
 	        		DBSchema.FileAccessTable.IS_UPLOADED + " INTEGER NOT NULL," + 
+	        		DBSchema.FileAccessTable.TIMESTAMP + " INTEGER NOT NULL," +
 	        		DBSchema.FileAccessTable.NODE_ID + " TEXT NOT NULL)");
-	        
-	        stmt.execute("CREATE TABLE IF NOT EXISTS " + DBSchema.AccessLocationTable.__NAME + "(" +
-	        		DBSchema.AccessLocationTable.ID + " TEXT PRIMARY KEY NOT NULL," +
-	        		DBSchema.AccessLocationTable.GEOHASH + " TEXT NOT NULL," +
-	        		DBSchema.AccessLocationTable.RADIUS + " INTEGER NOT NULL," +
-	        		DBSchema.AccessLocationTable.FILE + " TEXT NOT NULL," + 
-	        		DBSchema.AccessLocationTable.COUNT + " INTEGER NOT NULL," +
-	        		DBSchema.AccessLocationTable.MEAN_TOW + " TEXT NOT NULL)");
 	        
     	} 
     	catch (SQLException e) 

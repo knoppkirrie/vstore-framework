@@ -131,49 +131,21 @@ public class DBSchema {
         public static final String FILE_UUID = "file_uuid"; // TEXT PRIMARY KEY NOT NULL
     }
     
-    public static final class PositionTrackingTable {
-    	public static final String __NAME = "position_tracking";
-    	
-    	public static final String ID = "id";	// TEXT PRIMARY KEY NOT NULL
-    	public static final String LAT = "lat";	// REAL NOT NULL
-    	public static final String LNG = "lng";	// REAL NOT NULL
-    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
-    	public static final String GEOHASH = "geohash";	// TEXT NOT NULL
-    	
-    	private static final String[] COLUMNS = {ID, LAT, LNG, TIMESTAMP, GEOHASH};
-    }
-    
     public static final class FileAccessTable {
     	public static final String __NAME = "file_access";
     	
     	public static final String ID = "id";		// TEXT PRIMARY KEY NOT NULL
     	public static final String FILE = "file";	// TEXT NOT NULL
     	public static final String GEOHASH = "geohash";	// TEXT
-    	public static final String TIMEOFWEEK = "timeOfWeek";	// TEXT NOT NULL
-//    	public static final String TIMESTAMP = "timestamp";	// INTEGER NOT NULL
-//    	public static final String TYPE = "type";	// TEXT NOT NULL
-    	public static final String TOTALMINUTES = "totalMinutes";	// INTEGER
     	public static final String IS_UPLOADED = "isUploaded";	// INTEGER
     	public static final String NODE_ID = "nodeId";	// TEXT
+    	public static final String TIMESTAMP = "timestamp";	// INTEGER
     	
-    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMEOFWEEK, TOTALMINUTES, IS_UPLOADED, NODE_ID};
+    	private static final String[] COLUMNS = {ID, FILE, GEOHASH, TIMESTAMP, IS_UPLOADED, NODE_ID};
     	
     	public static final class TypeOfAccess {
     		public static final String STORE = "store";
     		public static final String GET = "get";
     	}
-    }
-    
-    public static final class AccessLocationTable {
-    	public static final String __NAME = "access_location";
-    	
-    	public static final String ID = "id";	// TEXT PRIMARY KEY NOT NULL
-    	public static final String GEOHASH = "geohash";	// TEXT NOT NULL
-    	public static final String RADIUS = "radius";	// INTEGER NOT NULL
-    	public static final String FILE = "file";	// TEXT NOT NULL
-    	public static final String COUNT = "count";	// INTEGER NOT NULL
-    	public static final String MEAN_TOW = "meanToW";	// TEXT NOT NULL
-    	
-    	private static final String[] COLUMNS = {ID, GEOHASH, RADIUS, FILE, COUNT, MEAN_TOW};
     }
 }

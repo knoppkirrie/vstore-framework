@@ -14,12 +14,9 @@ import vstore.framework.communication.download.Downloader;
 import vstore.framework.communication.download.events.DownloadFailedEvent;
 import vstore.framework.communication.download.events.DownloadProgressEvent;
 import vstore.framework.communication.download.events.DownloadedFileReadyEvent;
-import vstore.framework.context.ContextManager;
 import vstore.framework.db.DBResultOrdering;
-import vstore.framework.db.DBSchema;
 import vstore.framework.db.table_helper.FileAccessDBHelper;
 import vstore.framework.db.table_helper.FileDBHelper;
-import vstore.framework.db.table_helper.PositionTrackingDBHelper;
 import vstore.framework.error.ErrorCode;
 import vstore.framework.error.ErrorMessages;
 import vstore.framework.exceptions.VStoreException;
@@ -221,7 +218,6 @@ public class FileManager {
             {
                 f = FileDBHelper.getFile(uuid);
                 //File found locally.
-//                System.out.println("FILE FOUND LOCALLY");
                 if(f != null)
                 {
                 	
@@ -244,9 +240,6 @@ public class FileManager {
         }
 
         //File not found locally. Use download handler.
-        
-//        System.out.print("FILE NOT FOUND LOCALLY. DOWNLOAD STARTED: ");
-//        System.out.println( Downloader.downloadFile(uuid, requestId, dir) );
         Downloader.downloadFile(uuid, requestId, dir);
     }
 

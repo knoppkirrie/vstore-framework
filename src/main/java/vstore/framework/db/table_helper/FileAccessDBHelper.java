@@ -24,21 +24,19 @@ public class FileAccessDBHelper {
 				+ DBSchema.FileAccessTable.ID + ", "
 				+ DBSchema.FileAccessTable.FILE + ", "
 				+ DBSchema.FileAccessTable.GEOHASH + ", "
-				+ DBSchema.FileAccessTable.TIMEOFWEEK + ", "
-				+ DBSchema.FileAccessTable.TOTALMINUTES + ", "
+				+ DBSchema.FileAccessTable.TIMESTAMP + ", "
 				+ DBSchema.FileAccessTable.IS_UPLOADED + ", "
 				+ DBSchema.FileAccessTable.NODE_ID + ")" 
-				+ " VALUES (?,?,?,?,?,?,?)"; 
+				+ " VALUES (?,?,?,?,?,?)"; 
 		
 		
 		try(PreparedStatement pstmt = DBHelper.get().getConnection().prepareStatement(sql)) {
 			pstmt.setString(1, fa.getUuid());
 			pstmt.setString(2, fa.getFileUuid());
 			pstmt.setString(3, fa.getGeohash().toBase32());
-			pstmt.setString(4, fa.getTimeOfWeek().toString());
-			pstmt.setInt(5, fa.getTimeOfWeek().getTotalMinutes());
-			pstmt.setInt(6, 0);
-			pstmt.setString(7, fa.getNodeId());
+			pstmt.setLong(4, fa.getTimestamp());
+			pstmt.setInt(5, 0);
+			pstmt.setString(6, fa.getNodeId());
 			
 			pstmt.execute();
             pstmt.close();

@@ -56,8 +56,7 @@ public class InsertAccessThread extends Thread {
 			jsonFA.put("uuid", fa.getUuid());
 			jsonFA.put("file", fa.getFileUuid());
 			jsonFA.put("geohash", fa.getGeohash().toBase32());
-			jsonFA.put("timeOfWeek", fa.getTimeOfWeek().toString());
-			jsonFA.put("totalMinutes", fa.getTimeOfWeek().getTotalMinutes());
+			jsonFA.put("timestamp", fa.getTimestamp());
 			jsonFA.put("deviceId", IdentifierUtils.getDeviceIdentifier());
 			
 			jsonArray.add(jsonFA);

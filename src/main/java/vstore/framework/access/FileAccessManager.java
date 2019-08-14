@@ -1,6 +1,8 @@
 package vstore.framework.access;
 
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ch.hsr.geohash.GeoHash;
 import vstore.framework.communication.access.FileAccessUploader;
@@ -10,6 +12,9 @@ import vstore.framework.db.table_helper.FileAccessDBHelper;
 public class FileAccessManager {
 
 	private static FileAccessManager instance;
+	
+	/** Interval in minutes when to upload new FileAccess objects from this device. */
+	private static final int FILE_ACCESS_UPLOAD_INTERVAL = 1440;
 	
 	private FileAccessManager() {}
 	
@@ -120,5 +125,28 @@ public class FileAccessManager {
 		*/
 		
 	}
+	
+	/**
+	 * Schedules a TimerTask that uploads FileAccesses that have been detected on this device to the storage nodes.
+	 */
+	public void initializeFileAccessUploading() {
+		Timer t = new Timer();
+		FileAccessUploadTask upload = instance.new FileAccessUploadTask();
+		t.scheduleAtFixedRate(upload, 0, 1000 * 60 * FILE_ACCESS_UPLOAD_INTERVAL );	// transforming from min to ms 
+	}
+	
+	/**
+	 * Initializes uploading all new FileAccess objects to the respective storage nodes when running.
+	 */
+	class FileAccessUploadTask extends TimerTask {
+    	
+		@Override
+		public void run() {
+		
+			getFileAccessUploader().uploadFileAccesses();
+
+		}
+    }
+	
 	
 }

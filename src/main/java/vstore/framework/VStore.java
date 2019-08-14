@@ -127,13 +127,10 @@ public class VStore {
         if (mInstance == null)
         {
             mInstance = new VStore(baseDir, masterNodeAddress);
-        }
+        }       
         
-//        DEPRECATED ?
-//        // Initialize PositionTracking
-//        ContextManager.get().initializePositionTracking();        
-        
-        // TODO: include routine (once per day/hour) for uploading FileAccess to remote nodes
+        // initializing routine (once per day/hour) for uploading FileAccess to remote nodes
+        FileAccessManager.get().initializeFileAccessUploading();
     }
 
     /**
@@ -355,7 +352,6 @@ public class VStore {
             for(NodeInfo n : targetNodes) {
                 if(n == null) { continue; }
                 f.addStoredNodeId(n.getIdentifier());
-
             }
 
             //Insert information into local database
@@ -550,4 +546,5 @@ public class VStore {
         LoggingService.getThread().askToStop();
         PersistentDownloadList.clear();
     }
+    
 }

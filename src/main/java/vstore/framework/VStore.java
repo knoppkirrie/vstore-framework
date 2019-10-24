@@ -3,7 +3,7 @@ package vstore.framework;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -51,6 +51,7 @@ import vstore.framework.utils.ContextUtils;
 import vstore.framework.utils.FileUtils;
 import vstore.framework.utils.Hash;
 import vstore.framework.utils.IdentifierUtils;
+import vstore.framework.utils.simulation.SendOverSocketObject;
 
 import static vstore.framework.error.ErrorMessages.COPIED_FILE_NOT_FOUND;
 import static vstore.framework.error.ErrorMessages.COPYING_INTO_FRAMEWORK_FAILED;
@@ -368,10 +369,49 @@ public class VStore {
 				LogHandler.abortLoggingForFile(f.getUuid());
 	            throw new StoreException(ErrorCode.DB_LOCAL_ERROR, e.getMessage());
 			}
+            
+            /********************************************************
+             * 														*
+             * 		ADAPTATION FOR EDGECLOUDSIMULATION BELOW		*
+             * 														*
+             ********************************************************/
+            // open socket, connect to simulation
+            try {
+				Socket s = new Socket("localhost", 8000);
+				
+				// mark file as uploaded
+				f.setUploadPending(false);
+				FileDBHelper.updateFile(f, false, false, false);
+				SendOverSocketObject soso = new SendOverSocketObject(f, targetNodes, IdentifierUtils.getDeviceIdentifier());
+				
+				ObjectOutputStream outToServer = new ObjectOutputStream(s.getOutputStream());
+				outToServer.writeObject(soso);
+				outToServer.flush();
+				outToServer.close();
+//				outToServer.writeObject(nodes);				
+				
+				s.close();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}        
+            
+            /********************************************************
+             * 														*
+             * 		ADAPTATION FOR EDGECLOUDSIMULATION ABOVE		*
+             * 														*
+             ********************************************************/
             //Schedule job for background upload
-            Uploader up = Uploader.getUploader();
-            up.enqueueUpload(f);
-            up.startUploads();
+            // TODO: In Simulation, comment out these three lines 
+//            Uploader up = Uploader.getUploader();	
+//            up.enqueueUpload(f);
+//            up.startUploads();
         } 
         else 
         {

@@ -4,7 +4,7 @@ import ch.hsr.geohash.GeoHash;
 import vstore.framework.utils.IdentifierUtils;
 
 /**
- * Represents an access of a file with its GeoHash as location and the TimeOfWeek as time parameter
+ * Represents an access of a file with its GeoHash as location
  *
  */
 public class FileAccess {
